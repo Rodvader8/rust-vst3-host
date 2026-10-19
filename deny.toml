@@ -4,13 +4,14 @@
 version = 2
 # Fail on security advisories for crates in the dependency graph.
 ignore = [
-    # quick-xml DoS/quadratic-parse advisories. Both copies in our graph are Linux-only and
-    # parse *trusted, local* protocol XML at build time — `xcb` (build-dep, X11 protocol) pulls
-    # 0.30 and `wayland-scanner` (proc-macro) pulls 0.39. No untrusted XML reaches them, and the
-    # fixes sit outside those crates' pinned version ranges (can't upgrade without patching them
-    # upstream). Not part of the published `vst3-host` runtime surface.
-    "RUSTSEC-2026-0194",
-    "RUSTSEC-2026-0195",
+    # `zvariant`, `zbus_names` and `zvariant_derive` unmaintained (the zbus family was merged
+    # into zbus 6.x). Pulled only transitively via eframe -> egui-winit -> accesskit_unix ->
+    # atspi -> zbus 5.x (GUI/inspector path), never by the published `vst3-host` library.
+    # "Unmaintained" is an informational advisory, not a vulnerability; nothing to upgrade to
+    # until atspi/accesskit move to zbus 6.
+    "RUSTSEC-2026-0370",
+    "RUSTSEC-2026-0371",
+    "RUSTSEC-2026-0372",
     # `ttf-parser` unmaintained. Pulled only through egui's text stack (GUI/dev path), never by
     # the published `vst3-host` library. "Unmaintained" is an informational advisory, not a
     # vulnerability; nothing to upgrade to until egui migrates off it.
